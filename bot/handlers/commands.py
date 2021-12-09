@@ -1,3 +1,4 @@
+import logging
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from bot.db.models import Address, User
@@ -56,7 +57,7 @@ async def cmd_download_cities_streets(message: types.Message):
         )
     except Exception as e:
         await message.reply("אירעה שגיאה בעת תהליך ההורדה")
-        print(e)
+        logging.exception("canot fill_db_cities_streets (download)")
 
 
 async def cmd_local_cities_streets(message: types.Message):
@@ -70,8 +71,7 @@ async def cmd_local_cities_streets(message: types.Message):
         )
     except Exception as e:
         await message.reply("אירעה שגיאה בעת תהליך ההוספה")
-        print(e)
-        print(traceback.format_exc())
+        logging.exception("canot fill_db_cities_streets (local)")
 
 
 async def cmd_cancel_state(message: types.Message, state: FSMContext):
