@@ -66,7 +66,7 @@ async def fill_db_cities_streets(download: bool) -> tuple:
     added_streets_count = 0
 
     for city in cities:
-        exists = await City.filter(id=city.id)
+        exists = await City.filter(id=city.id).first()
         db_city = (
             exists
             if exists
