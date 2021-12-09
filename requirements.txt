@@ -7,3 +7,4 @@ aiogram==2.16
 json5==0.9.6
 python-dotenv==0.19.2
 envparse==0.2.0
+dacite==1.6.0

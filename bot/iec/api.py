@@ -78,8 +78,8 @@ class IECCity:
     name: str
     mahoz_id: int
     mahoz_name: str
-    distinct_name: int
-    distinct_id: str
+    distinct_name: str
+    distinct_id: int
     loaded_streets: list[IECStreet]
 
 

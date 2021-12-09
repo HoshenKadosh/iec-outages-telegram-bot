@@ -2,9 +2,10 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from bot.db.models import Address, User
 import bot.handlers.states.address_form as address_form
-from bot.iec.cities_streets_downloader import download_and_fill_db_cities_streets
+from bot.iec.cities_streets_downloader import fill_db_cities_streets
 from bot.keyboards import get_addresses_keyboard
 from bot.middlewares import prefetch_user
+import traceback
 
 
 @prefetch_user
@@ -47,7 +48,7 @@ async def cmd_check_address(message: types.Message, state: FSMContext):
 async def cmd_download_cities_streets(message: types.Message):
     await message.reply("מוריד ערים ורחובות, תהליך זה עלול לקחת מספר דקות...")
     try:
-        added_cities, added_streets = await download_and_fill_db_cities_streets()
+        added_cities, added_streets = await fill_db_cities_streets(True)
         await message.reply(
             "התהליך בוצע בהצלחה\n\n"
             f"ערים/ישובים שנוספו: {added_cities}\n"
@@ -55,7 +56,22 @@ async def cmd_download_cities_streets(message: types.Message):
         )
     except Exception as e:
         await message.reply("אירעה שגיאה בעת תהליך ההורדה")
-        print(str(e))
+        print(e)
+
+
+async def cmd_local_cities_streets(message: types.Message):
+    await message.reply("מוסיף ערים ורחובות...")
+    try:
+        added_cities, added_streets = await fill_db_cities_streets(False)
+        await message.reply(
+            "התהליך בוצע בהצלחה\n\n"
+            f"ערים/ישובים שנוספו: {added_cities}\n"
+            f"רחובות שנוספו: {added_streets}"
+        )
+    except Exception as e:
+        await message.reply("אירעה שגיאה בעת תהליך ההוספה")
+        print(e)
+        print(traceback.format_exc())
 
 
 async def cmd_cancel_state(message: types.Message, state: FSMContext):
@@ -74,4 +90,7 @@ def register_cmds(dp: Dispatcher):
     dp.register_message_handler(cmd_check_address, commands="check_address")
     dp.register_message_handler(
         cmd_download_cities_streets, commands="download_cities_streets", is_admin=True
+    )
+    dp.register_message_handler(
+        cmd_local_cities_streets, commands="local_cities_streets", is_admin=True
     )

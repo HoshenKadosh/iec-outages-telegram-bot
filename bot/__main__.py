@@ -29,7 +29,7 @@ async def init_db(tz: str):
 
     async def log_db_queryies():
         conn_wrapper = Tortoise.get_connection("default")
-        await conn_wrapper._connection.set_trace_callback(print)
+        await conn_wrapper._connection.set_trace_callback(logging.debug)
 
     if not config.is_production:
         await log_db_queryies()
