@@ -206,7 +206,6 @@ class IECApi:
             normilize_city(c)
             for c in raw_cities[:1500]
             if not self.is_unknown_name_id(c["K_YESHUV"], c["YESHUV"])
-            and "רמת גן" in c["YESHUV"]
         ]
 
     async def get_streets_for_city(self, city_id: int, q="") -> list[IECStreet]:
