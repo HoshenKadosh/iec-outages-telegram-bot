@@ -186,10 +186,10 @@ class IECApi:
         :rtype: list[IECCity]
         """
 
-        def normilize_city(city: dict) -> IECCity:
+        def normalize_city(city: dict) -> IECCity:
             return IECCity(
                 id=city["K_YESHUV"],
-                name=city["YESHUV"],
+                name=city["YESHUV"].replace("-", " "),
                 mahoz_id=city["K_MAHOZ"],
                 mahoz_name=city["MAHOZ"],
                 distinct_id=city["K_EZOR"],
@@ -203,7 +203,7 @@ class IECApi:
         )
         raw_cities = await resp.json()
         return [
-            normilize_city(c)
+            normalize_city(c)
             for c in raw_cities[:1500]
             if not self.is_unknown_name_id(c["K_YESHUV"], c["YESHUV"])
         ]
@@ -221,7 +221,12 @@ class IECApi:
         :rtype: list[IECStreet]
         """
 
-        def normilize_street(street: dict) -> IECStreet:
+        def normalize_street(street: dict) -> IECStreet:
+            name: str = street["name"]
+            # full name
+            if name.startswith("שד "):
+                name.replace("שד ", "שדרות ", 1)
+            name.replace("-", " ")
             return IECStreet(id=street["K_REHOV"], name=street["REHOV"])
 
         rbzid = await self.get_rbzid()
@@ -234,7 +239,7 @@ class IECApi:
         )
         raw_streets = await resp.json()
         return [
-            normilize_street(s)
+            normalize_street(s)
             for s in raw_streets
             if not self.is_unknown_name_id(s["K_REHOV"], s["REHOV"])
         ]
@@ -268,7 +273,7 @@ class IECApi:
         if district_id:
             params["Districtid"] = district_id
 
-        def normilize_outage(outage: dict):
+        def normalize_outage(outage: dict):
             restore_est_matches = re.search(
                 r"\d{2}:\d{2}[ X]\d{2}\/\d{2}\/\d{4}",
                 outage.get("IncidentStatusName", ""),
@@ -309,7 +314,7 @@ class IECApi:
             "GET", "/pages/IecServicesHandler.ashx", params=params, timeout=20
         )
         raw_outage = await resp.json()
-        return normilize_outage(raw_outage)
+        return normalize_outage(raw_outage)
 
 
 iec_api = IECApi()
