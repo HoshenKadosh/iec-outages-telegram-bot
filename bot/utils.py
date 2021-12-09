@@ -16,10 +16,10 @@ def time_diff_between_two_dates_text(d1: datetime, d2: datetime) -> str:
     """
 
     def get_min(m):
-        return "דקה" if m <= 0 else f"{int(m)} דקות"
+        return "דקה" if m <= 2 else f"{int(m)} דקות"
 
     def get_hours(h):
-        return "שעה" if h == 1 else f"{int(h)} שעות"
+        return "שעה" if h < 2 else f"{int(h)} שעות"
 
     diff = round((d1 - d2).seconds / 60)
     if diff < 60:

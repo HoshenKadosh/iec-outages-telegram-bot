@@ -239,12 +239,12 @@ class OutagesMonitor:
             await self._process_new_outage(
                 outage, outage_key, city_id, district_id, street_id, home_num
             )
-            self.logger.info("New outage detected: ",outage_key)
+            self.logger.info("New outage detected: " + outage_key)
 
         # outage ended
         if not ongoing_power_outage and outage_key in self.active_outages:
             await self._process_outage_ended(outage_key, city_id, street_id, home_num)
-            self.logger.info("Outage end detected: ",outage_key)
+            self.logger.info("Outage end detected: " + outage_key)
 
     async def _process_outage_update_if_needed(
         self,
