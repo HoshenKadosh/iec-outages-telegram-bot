@@ -1,0 +1,13 @@
+.vscode/
+.idea/
+.vagrant/
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+bot/db/data/*
+config.env
+.env
