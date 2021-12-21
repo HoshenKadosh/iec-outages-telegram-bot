@@ -127,9 +127,10 @@ async def process_address_form_home(
             text = detail_text_from_outage(
                 outage_status.get_outage_model(), full_address
             )
-            message.answer("ידוע כרגע על " + text)
+            await message.answer("ידוע כרגע על " + text)
         except Exception:
             message.answer("אירעה שגיאה בבדיקת הסטטוס. יש לנסות שוב מאוחר יותר")
+        await state.finish()
         return
 
     address, _ = await Address.get_or_create(

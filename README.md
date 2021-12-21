@@ -1,1 +1,1 @@
-# Israel Electric Company Outages Telegram Bot
+# Israel Electric Corporation Outages Telegram Bot
